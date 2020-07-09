@@ -36,11 +36,7 @@ void onPacketReceived(int fd,u_int8_t *databuf,u_int16_t framelength,u_int16_t p
 		break;
 		default:
 			printf("UNKNOWN PACKET TYPE %d\n", pkt_type);
-			printf("Packet length: %d\n", framelength);
-			// for (i=0;i<framelength;i++){
-        	// 	printf("%02X",databuf[i]);
-   			// }
-			// printf("\n");
+		break;
 	}
 }
 
