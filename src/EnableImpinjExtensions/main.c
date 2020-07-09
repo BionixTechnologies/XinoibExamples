@@ -83,6 +83,9 @@ void startInventory(int fd) {
 
 	printf("Starting inventory\n");
 
+	// Enable inventory response parser thread
+	threadControl = 1;
+
 	// Infinity antenna cycles
 	AppEntry_R2000WriteRegister(fd, HST_ANT_CYCLES, 0xFF, 0xFF, 0x00, 0x00);
 
@@ -92,7 +95,8 @@ void startInventory(int fd) {
 
 // Stop inventory and close serial port
 void stopInterruption() {
-	printf("Stopping inventory");
+	printf("\nStopping inventory\n");
+	threadControl = 0;
     ControlCommand(fd, CCMD_RESET);
 	sleep(1);
 	close(fd);
