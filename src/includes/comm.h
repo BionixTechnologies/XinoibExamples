@@ -25,7 +25,7 @@ u_int8_t CheckSum(unsigned char *uBuff, int uBuffLen);
  * @param baudrate velocidad
  * @return int
  */
-int initRFID(void *callback);
+int initRFID(void *callback, int* threadControl);
 
 
 
@@ -39,3 +39,5 @@ int initRFID(void *callback);
  * @return void
  */
 void R2000_Send(int fd,u_int8_t *Uart_Send_Buf,unsigned int length);
+
+void R2000_Read(int fd, u_int8_t * buf, int num_bytes);
