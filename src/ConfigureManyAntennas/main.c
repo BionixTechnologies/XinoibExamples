@@ -109,6 +109,7 @@ void startInventory(int fd) {
 // Stop inventory and close serial port
 void stopInterruption() {
 	printf("\nStopping inventory\n");
+	threadControl = 0;
     ControlCommand(fd, CCMD_RESET);
 	sleep(5);
 	close(fd);

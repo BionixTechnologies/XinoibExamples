@@ -6,12 +6,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
-#include <stdint.h>
 
 int fd;
 
 // Uart thread initially stopped
 int threadControl = 0;
+
 
 //Callback to receive the RFID frames
 void onPacketReceived(int fd,u_int8_t *databuf,u_int16_t framelength,u_int16_t pkt_type)
@@ -40,20 +40,6 @@ void onPacketReceived(int fd,u_int8_t *databuf,u_int16_t framelength,u_int16_t p
 	}
 }
 
-
-void configureDynamicQAlgorithm(int fd) {
-
-	printf("Setting dynamic Q algorithm\n");
-		
-	AppEntry_R2000WriteRegister(fd, HST_INV_SEL, 0x01, 0x00, 0x00, 0x00);
-	AppEntry_R2000WriteRegister(fd, HST_INV_CFG, 0x01, 0x00, 0x00, 0x00);
-	AppEntry_R2000WriteRegister(fd, HST_INV_ALG_PARM_0, 0x86, 0x64, 0x00, 0x00);
-	AppEntry_R2000WriteRegister(fd, HST_INV_ALG_PARM_2, 0x01, 0x00, 0x00, 0x00); 
-		
-	printf("Done.\n");
-
-}
-
 void startInventory(int fd) {
 
 	printf("Starting inventory\n");
@@ -68,28 +54,25 @@ void startInventory(int fd) {
 	AppEntry_R2000CommandExcute(fd, CMD_18K6CINV);
 }
 
-// Stop inventory and close serial port
+
+//Stop inventory and close serial port
 void stopInterruption() {
 	printf("\nStopping inventory\n");
 	threadControl = 0;
-    ControlCommand(fd, CCMD_RESET);
+    ControlCommand(fd,CCMD_RESET);
 	sleep(5);
 	close(fd);
 	exit(0);
 }
 
-int main() {
-
-	printf("Configure dynamic Q algorithm example:\n");
+int main()
+{
 
 	// Callback where are receiving modem response; 
 	fd = initRFID(*onPacketReceived, &threadControl); 
-
+	
 	// Catch Ctrl-C event 
 	signal(SIGINT, stopInterruption);
-	
-	// Configure dynamic Q algorithm
-	configureDynamicQAlgorithm(fd);
 
 	// Launch inventory
 	startInventory(fd);
