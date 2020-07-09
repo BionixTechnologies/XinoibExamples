@@ -46,28 +46,17 @@ void onPacketReceived(int fd,u_int8_t *databuf,u_int16_t framelength,u_int16_t p
 
 void modifyBitInMacRegister(u_int16_t address, int bit_position, int new_value) {
 	
-	int i = 0;
-	u_int8_t * buf = malloc(sizeof(u_int8_t)*8);
-	int byte = bit_position / 8;
+	// Get register value
+	u_int8_t * buf = malloc(sizeof(u_int8_t)*4);
+	AppEntry_R2000ReadRegister(fd, address, buf);
 
-	// Send read request message (HOST_REG_REQ)
-	AppEntry_R2000ReadRegister(fd, address);
-
-	// Read response message from RFID chip (HOST_REG_REQ_READ)
-	R2000_Read(fd, buf, 8);
-
-	// Parse register value (4 bytes) from response message
-	uint8_t register_value[4];
-	for (i=4;i<8;i++){
-        register_value[i-4] = buf[i];
-   	}
-	
 	// Modify register value
-	register_value[byte] ^= (-new_value ^ register_value[byte]) & (1 << bit_position);
+	int byte = bit_position / 8;
+	buf[byte] ^= (-new_value ^ buf[byte]) & (1 << bit_position);
 
-	// Write new register value
-	AppEntry_R2000WriteRegister(fd, address, register_value[0], 
-		register_value[1], register_value[2], register_value[3]);
+	// Write the new register value
+	AppEntry_R2000WriteRegister(fd, address, buf[0], 
+		buf[1], buf[2], buf[3]);
 
 }
 

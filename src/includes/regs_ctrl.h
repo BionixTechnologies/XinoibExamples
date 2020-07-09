@@ -34,7 +34,7 @@ void AppEntry_R2000WriteRegister(int fd,u_int16_t Address, u_int8_t Data1,u_int8
  * @param R2000_Command comando a ejecutar
  * @return void
  */
-void AppEntry_R2000ReadRegister(int fd, u_int16_t Address);
+void AppEntry_R2000ReadRegister(int fd,u_int16_t Address, u_int8_t * register_value);
 
 
 /**
