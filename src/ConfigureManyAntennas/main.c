@@ -14,8 +14,12 @@
 #define DWELL_TIME 150		// ms
 
 int fd;
+
+// Uart thread initially stopped
+int threadControl = 0;
+
 //Callback to receive the RFID frames
-void Packets_Dat(int fd,u_int8_t *databuf,u_int16_t framelength,u_int16_t pkt_type)
+void onPacketReceived(int fd,u_int8_t *databuf,u_int16_t framelength,u_int16_t pkt_type)
 {
     int i = 0;
 	switch(pkt_type){
@@ -90,6 +94,11 @@ void configureAntennas(int fd) {
 }
 
 void startInventory(int fd) {
+	
+	printf("Starting inventory\n");
+
+	// Enable inventory response parser thread
+	threadControl = 1;
 
 	// Start inventory
 	AppEntry_R2000CommandExcute(fd,CMD_18K6CINV);
@@ -99,6 +108,7 @@ void startInventory(int fd) {
 
 // Stop inventory and close serial port
 void stopInterruption() {
+	printf("\nStopping inventory\n");
     ControlCommand(fd, CCMD_RESET);
 	sleep(5);
 	close(fd);
@@ -111,7 +121,7 @@ int main()
 	printf("Configure many antennas example:\n");
 
 	// Callback where are receiving modem response; 
-	fd = initRFID(*Packets_Dat); 
+	fd = initRFID(*onPacketReceived, &threadControl);
 
 	// Catch Ctrl-C event 
 	signal(SIGINT, stopInterruption);
