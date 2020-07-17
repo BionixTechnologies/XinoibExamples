@@ -48,4 +48,4 @@ void ControlCommand(int fd,u_int8_t control_cmd);
 
 void AppEntry_R2000WriteOemRegister(int16_t fd, u_int32_t address, u_int8_t data1, u_int8_t data2, u_int8_t data3, u_int8_t data4);
 
-void AppEntry_R2000ReadOemRegister(int16_t fd, u_int32_t address);
+void AppEntry_R2000ReadOemRegister(int16_t fd, u_int32_t address, u_int8_t * register_value);
