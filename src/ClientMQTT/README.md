@@ -4,7 +4,7 @@ This repository contains an example for how to publish TAGs with a MQTT client.
 
 # Content 
 
-- main.c: A simple MQTT client integrated with Xinoid, who subsribes to a topic and print out a message, everytime it receives a TAG
+- main.c: A simple MQTT client integrated with Xinoid, who subscribes to a topic and print out a message, everytime it receives a TAG
 - makefile: to build the example
 
 # To run
@@ -19,3 +19,6 @@ To run the script, you need the following packages. Here is the installation com
 sudo apt install gcc mosquitto mosquitto-clients libmosquitto-dev
 ~~~~~
 
+
+Additionally, you must have an MQTT server running, such as Mosquitto. To learn more about an MQTT broker you can consult the Mosquitto example 
+https://github.com/Johannes4Linux/libmosquitto_examples

@@ -9,6 +9,7 @@
 #include <signal.h>
 #include <stdint.h>
 #include <mosquitto.h>
+#include <string.h>
 int fd;
 const char* addr;
 const char* port;
@@ -17,8 +18,11 @@ const char* topic;
 // Uart thread initially stopped
 int threadControl = 0;
 
-int publishMQTT(u_int8_t *databuf){
+int publishMQTT(char *tag){
 
+	printf("\n");
+	printf("Frame: %s \n", tag);	
+	printf("\n");
 	int rc;
 	struct mosquitto * mosq;
 
@@ -32,34 +36,32 @@ int publishMQTT(u_int8_t *databuf){
 		mosquitto_destroy(mosq);
 		return -1;
 	}
-	printf("Sending TAG to the server MQTT\n");
+	printf("Sending TAG to the server MQTT in %s:%s with topic: %s\n",addr,port,topic);
+	printf("--------------------------------------------------------------------\n");
 
-	mosquitto_publish(mosq, NULL, topic, 6, databuf, 0, false);
+	mosquitto_publish(mosq, NULL, topic, 56, tag, 0, false);
 	
 	mosquitto_disconnect(mosq);
 	mosquitto_destroy(mosq);
 	mosquitto_lib_cleanup();
 	return 0;
 }
-
 //Callback to receive the RFID frames
 void onPacketReceived(int fd,u_int8_t *databuf,u_int16_t framelength,u_int16_t pkt_type)
 {
     int i = 0;
-	char hex[10];
-	char hexstring[4*framelength];
-	hexstring[0]="";
+	char * hexstring = malloc(sizeof(char)*framelength*2);
 	switch(pkt_type){
 		case CMD_BEGIN:
 			printf("INVENTORY STARTED\n");
 		break;
 		case INV:
 			printf("TAG_RECEIVED\n");
+			int index = 0;
 			for (i=0;i<framelength;i++){
-				sprintf(hex, "%02X", databuf[i]);
-				strcat(hexstring, hex);
+				//Convert to string format to send MQTT frame
+				index += sprintf(&hexstring[index],"%02X", databuf[i]); 
    			}
-			printf("\n");
 			publishMQTT(hexstring);
 		break;
 		case CMD_ACTIVE:
