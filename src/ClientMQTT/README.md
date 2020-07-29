@@ -20,5 +20,4 @@ sudo apt install gcc mosquitto mosquitto-clients libmosquitto-dev
 ~~~~~
 
 
-Additionally, you must have an MQTT server running, such as Mosquitto. To learn more about an MQTT broker you can consult the Mosquitto example 
-https://github.com/Johannes4Linux/libmosquitto_examples
+Additionally, you must have an MQTT server running, such as Mosquitto.
