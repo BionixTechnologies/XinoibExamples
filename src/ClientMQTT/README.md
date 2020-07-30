@@ -1,6 +1,6 @@
 # General
 
-This repository contains an example for how to publish TAGs with a MQTT client.
+This folder contains an example for how to publish TAGs with a MQTT client.
 
 # Content 
 
