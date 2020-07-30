@@ -25,3 +25,7 @@ For any example, just go to /src on our XINOID device, run make and run the gene
 
 It is completely necessary to have a reader XINOID to be able to run the examples. Some examples need an external library that must be downloaded. 
 For this, some examples include a readme where the libraries are included.
+
+
+
+2020 Bionix Supplychain Technologies SLU
