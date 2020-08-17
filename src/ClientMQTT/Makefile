@@ -8,7 +8,7 @@ endif
 
 TARGET = clientMQTT
 
-$(TARGET): main.o ../../lib/libBNXrfid.a
+$(TARGET): main.o /usr/bnxlibs/libBNXrfid.a /usr/bnxlibs/libBNXio.a
 	$(CC) $^ -o $@ -lpthread -Wall -lmosquitto
 
 main.o: main.c
